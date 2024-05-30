@@ -22,8 +22,8 @@ This project implements a simple command-line shell. The shell grants the users 
      
        i. **clear:** Clears the screen
 
-  3. External Commands:
-       The shell can execute any external command available in the system's PATH.
+  2. ## External Commands:
+       **The shell can execute any external command available in the system's PATH.**
 
 # Project Structure
 
