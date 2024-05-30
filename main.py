@@ -2,14 +2,13 @@ import sys
 import os
 import subprocess
 from abc import ABC, abstractmethod
+import pyperclip
 
-# Command interface
 class Command(ABC):
     @abstractmethod
     def execute(self, args):
         pass
 
-# Built-in commands
 class EchoCommand(Command):
     def execute(self, args):
         print(" ".join(args))
@@ -51,14 +50,47 @@ class PwdCommand(Command):
 
 class CdCommand(Command):
     def execute(self, args):
+        global CURRENT_PATH
         path = ''.join(args)
         path = os.path.expanduser(path)
         try:
             os.chdir(path)
+            CURRENT_PATH = path
         except FileNotFoundError:
             print(f"cd: {path}: No such file or directory")
 
-# Shell class
+class DirCommand(Command):
+    def execute(self, args=None):
+        global CURRENT_PATH
+        if args:
+            dir_list = os.listdir(''.join(args))
+        else:
+            dir_list = os.listdir(CURRENT_PATH)
+        for dir in dir_list:
+            print(dir) 
+        return dir_list 
+
+class CopyCommand(Command):
+    def execute(self, args):
+        global CURRENT_PATH
+        if args:
+            dir_list = os.listdir(''.join(args))
+        else:
+            dir_list = os.listdir(CURRENT_PATH)
+        pyperclip.copy('\n'.join(dir_list))
+
+class AppendCommand(Command):
+    def execute(self, args):
+        try:
+            with open(''.join(args)) as file:
+                print(file.read())
+        except FileNotFoundError:
+            print(f"{''.join(args)} not found")
+
+class ClearCommand(Command):
+    def execute(self, args):
+        os.system('cls')
+
 class Shell:
     def __init__(self):
         self.builtins = {}
@@ -67,6 +99,10 @@ class Shell:
         self.builtins["type"] = TypeCommand(self.builtins)
         self.builtins["pwd"] = PwdCommand()
         self.builtins["cd"] = CdCommand()
+        self.builtins["dir"] = DirCommand()
+        self.builtins["copy"] = CopyCommand()
+        self.builtins['append'] = AppendCommand()
+        self.builtins['clear'] = ClearCommand()
 
     def execute_command(self, command_line):
         parts = command_line.split()
@@ -90,10 +126,12 @@ class Shell:
                     print(line, end="")
         except FileNotFoundError:
             print(f"{program_name}: command not found")
-
+            
     def run(self):
+        global CURRENT_PATH
+        CURRENT_PATH = os.path.dirname(os.path.realpath(__file__))
         while True:
-            sys.stdout.write("$ ")
+            sys.stdout.write(f"$ {CURRENT_PATH}>")
             sys.stdout.flush()
             try:
                 command_line = input().strip()
