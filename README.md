@@ -4,13 +4,21 @@ This project implements a simple command-line shell. The shell grants the users 
 # Features
   1. Built-in Commands:
        a. echo: Prints the provided arguments to the standard output.
+     
        b. exit: Exits the shell with an optional exit code.
+     
        c. type: Displays whether a command is a shell built-in or an external program and shows the path to the external program if found.
+     
        d. pwd: Prints the current working directory.
+     
        e. cd: Changes the current working directory to the specified path.
+     
        f. dir: Displays all the Files and Folders in the specified location.
+     
        g. copy: Copies all the Files and Folders name in the specified Location.
+     
        h. append: Open files in another directory as if they were located in the current directory.
+     
        i. clear: Clears the screen
 
   3. External Commands:
