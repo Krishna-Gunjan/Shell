@@ -45,7 +45,11 @@ This project implements a simple command-line shell in Python. The shell allows 
   3. Built-in Command Classes:
 
         a. EchoCommand: Implements the echo command.
+     
         b. ExitCommand: Implements the exit command.
+     
         c. TypeCommand: Implements the type command, checking if a command is built-in or external.
+     
         d. PwdCommand: Implements the pwd command.
+     
         e. CdCommand: Implements the cd command.
